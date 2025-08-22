@@ -1,42 +1,88 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@import "tailwindcss";
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+
+@keyframes background-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+  background-color: #e8f0fe;
+  color: #1f2937;
+  .theme-toggle-button {
+    background-color: white; /* White fill color */
   }
+  .theme-toggle-button .theme-icon {
+    color: black; /* Black icon color */
+  }
+}
+.dark body {
+  background-color: #1a202c;
+  color: #f3f4f6;
+  .dark .theme-toggle-button {
+    background-color: #374151; /* Dark gray fill color (e.g., gray-700) */
+  }
+  .dark .theme-toggle-button .theme-icon {
+    color: white; /* White icon color */
+  }
+}
+
+main {
+  position: relative;
+}
+
+main::before, main::after {
+  content: '';
+  position: absolute;
+  width: 60%; height: 60%;
+  z-index: 1;
+  background-image: linear-gradient(90deg, #4285F4, #DB4437, #F4B400, #0F9D58, #4285F4);
+  background-size: 400% 400%;
+  -webkit-mask-image:
+    linear-gradient(0deg, transparent 45%, black 45%, black 55%, transparent 55%),
+    linear-gradient(90deg, transparent 45%, black 45%, black 55%, transparent 55%);
+  mask-image:
+    linear-gradient(0deg, transparent 45%, black 45%, black 55%, transparent 55%),
+    linear-gradient(90deg, transparent 45%, black 45%, black 55%, transparent 55%);
+  -webkit-mask-size: 3rem 3rem;
+  mask-size: 3rem 3rem;
+  filter: blur(2px);
+  opacity: 0.3;
+}
+main::before {
+  top: -30%; left: -30%;
+  animation: background-pan 15s ease-in-out infinite;
+}
+main::after {
+  bottom: -30%; right: -30%;
+  animation: background-pan 15s ease-in-out infinite reverse;
+}
+.dark main::before, .dark main::after {
+  opacity: 0.25;
+  filter: blur(3px);
+}
+
+.glowing-btn {
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+.glowing-btn::before {
+  content: '';
+  position: absolute;
+  top: -4px; left: -4px;
+  right: -4px; bottom: -4px;
+  background: linear-gradient(90deg, #4285F4, #DB4437, #F4B400, #0F9D58, #4285F4);
+  background-size: 400% 400%;
+  border-radius: 1rem;
+  filter: blur(15px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  animation: background-pan 3s linear infinite;
+}
+.glowing-btn:hover::before {
+  opacity: 1;
 }
