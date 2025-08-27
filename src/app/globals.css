@@ -10,30 +10,30 @@
 
 body {
   background-color: #e8f0fe;
-  color: #1f2937;
+  color: #1f2937;}
   .theme-toggle-button {
     background-color: white; /* White fill color */
   }
   .theme-toggle-button .theme-icon {
     color: black; /* Black icon color */
   }
-}
+
 .dark body {
   background-color: #1a202c;
-  color: #f3f4f6;
+  color: #f3f4f6;}
   .dark .theme-toggle-button {
-    background-color: #374151; /* Dark gray fill color (e.g., gray-700) */
+    background-color: #1c222e; /* Dark gray fill color (e.g., gray-700) */
   }
   .dark .theme-toggle-button .theme-icon {
     color: white; /* White icon color */
   }
-}
+
 
 main {
   position: relative;
 }
 
-main::before, main::after {
+#landing-page-main::before, #landing-page-main::after {
   content: '';
   position: absolute;
   width: 60%; height: 60%;
@@ -59,7 +59,7 @@ main::after {
   bottom: -30%; right: -30%;
   animation: background-pan 15s ease-in-out infinite reverse;
 }
-.dark main::before, .dark main::after {
+.dark #landing-page-main::before, .dark #landing-page-main::after {
   opacity: 0.25;
   filter: blur(3px);
 }
@@ -85,4 +85,52 @@ main::after {
 }
 .glowing-btn:hover::before {
   opacity: 1;
+}
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  max-width: 650px;
+  /* REMOVED the fixed height */
+  perspective: 1500px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  /* This ensures the container has a height based on its content */
+  min-height: 380px;
+}
+
+.flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* The front face now dictates the height */
+.flip-card-front {
+  /* REMOVED 'position: absolute' to keep it in the layout flow */
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The back face is positioned absolutely within the container */
+.flip-card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(180deg);
 }

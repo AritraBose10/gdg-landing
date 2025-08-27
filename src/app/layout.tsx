@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
 import './globals.css';
-import { Providers } from './provider';
 
 export const metadata: Metadata = {
   title: 'GDG On Campus TIU',
@@ -11,7 +11,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <ThemeProvider attribute="class" defaultTheme="system">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
