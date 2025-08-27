@@ -92,7 +92,7 @@ const Page: FC = () => {
   return (
     <main id="landing-page-main" className="h-screen font-sans overflow-hidden flex flex-col">
       <IconBackground />
-      <header className="w-full relative z-30">
+      <header className="w-full relative z-5000">
         <div className="absolute top-0 left-0 px-1 py-4">
           {mounted && (
             <Image
@@ -117,7 +117,7 @@ const Page: FC = () => {
           {renderThemeChanger()}
         </div>
       </header>
-      <div className="flex-grow flex items-center justify-center relative z-20 p-4">
+      <div className="flex-grow flex items-center justify-center relative z-999 p-4">
         <div className={`flip-card ${isFlipped ? 'is-flipped' : ''}`}>
           <div className="flip-card-inner">
 
@@ -148,12 +148,19 @@ const Page: FC = () => {
               <h2 className="text-3xl sm:text-4xl font-bold mb-8">Choose Your Path</h2>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
                 <Link href="/technical">
-                  <button type="button" className="glowing-btn inline-block px-8 py-3 bg-green-500 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105">
+                  <button
+                    type="button"
+                    className="glowing-btn inline-block text-center px-8 py-3 bg-green-500 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105"
+                  >
                     Technical Team
                   </button>
                 </Link>
+
                 <Link href="/non-technical">
-                  <button type="button" className="glowing-btn inline-block px-8 py-3 bg-purple-500 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105">
+                  <button
+                    type="button"
+                    className="glowing-btn inline-block text-center px-8 py-3 bg-purple-500 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105"
+                  >
                     Non-Technical Team
                   </button>
                 </Link>

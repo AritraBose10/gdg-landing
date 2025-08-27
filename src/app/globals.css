@@ -67,25 +67,19 @@ main::after {
 .glowing-btn {
   position: relative;
   z-index: 10;
-  overflow: hidden;
+  /* A smooth transition for the button's lift and shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.glowing-btn::before {
-  content: '';
-  position: absolute;
-  top: -4px; left: -4px;
-  right: -4px; bottom: -4px;
-  background: linear-gradient(90deg, #4285F4, #DB4437, #F4B400, #0F9D58, #4285F4);
-  background-size: 400% 400%;
-  border-radius: 1rem;
-  filter: blur(15px);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s ease-in-out;
-  animation: background-pan 3s linear infinite;
+
+.glowing-btn:hover {
+  /* The button lifts slightly */
+  transform: translateY(-3px);
+  /* A soft, colored shadow appears, matching the button's theme */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-.glowing-btn:hover::before {
-  opacity: 1;
-}
+
+/* We no longer need the ::before pseudo-element for the glow */
+
 .flip-card {
   background-color: transparent;
   width: 100%;
