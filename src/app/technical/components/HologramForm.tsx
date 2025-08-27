@@ -98,6 +98,7 @@ const formSteps: FormField[][] = [
 const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState<FormData>(initialFormData);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
@@ -117,7 +118,7 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log('Sending final form data:', formData);
+        setIsLoading(true);
 
         try {
             const response = await fetch('/api/submit-application', {
@@ -135,7 +136,10 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
             }
         } catch (error) {
             console.error('An error occurred while submitting:', error);
-            onFailure(); // Trigger the failure page
+            onFailure();
+        }
+        finally {
+            setIsLoading(false); // Set loading to false when done
         }
     };
     const totalSteps = formSteps.length;
@@ -177,7 +181,13 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
                 {currentStep < totalSteps - 1 ? (
                     <button type="button" onClick={handleNext} className="hologram-button py-2 px-6 font-bold rounded-md z-50">Next &rarr;</button>
                 ) : (
-                    <button type="button" onClick={handleSubmit} className="hologram-button py-2 px-6 font-bold rounded-md z-50">SUBMIT</button>
+                    <button
+                        type="button"
+                        className="hologram-button py-2 px-6 font-bold rounded-md z-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={isLoading} // Disable the button while loading
+                    >
+                        {isLoading ? 'Submitting...' : 'SUBMIT'}
+                    </button>
                 )}
             </div>
         </form>

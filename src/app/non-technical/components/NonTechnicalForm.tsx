@@ -23,11 +23,12 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
 
     const handleNext = () => setStep(prev => prev + 1);
     const handleBack = () => setStep(prev => prev - 1);
+    const [isLoading, setIsLoading] = useState(false);
 
     // 2. Update handleSubmit to use the props
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log('Sending final form data:', formData);
+        setIsLoading(true);
 
         try {
             const response = await fetch('/api/submit-application', {
@@ -45,7 +46,10 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
             }
         } catch (error) {
             console.error('An error occurred while submitting:', error);
-            onFailure(); // Trigger the failure page
+            onFailure();
+        }
+        finally {
+            setIsLoading(false);
         }
     };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -90,7 +94,13 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
                 )}
                 <div className="flex justify-between items-center pt-4">
                     {step > 1 ? <button type="button" onClick={handleBack} className="plexus-button py-2 px-6 font-bold text-base rounded-full">Back</button> : <div />}
-                    {step < totalSteps ? <button type="button" onClick={handleNext} className="plexus-button py-2 px-6 font-bold text-base rounded-full">Next</button> : <button type="submit" className="plexus-button py-2 px-6 font-bold text-base rounded-full">Submit</button>}
+                    {step < totalSteps ? <button type="button" onClick={handleNext} className="plexus-button py-2 px-6 font-bold text-base rounded-full">Next</button> : <button
+                        type="submit"
+                        className="hologram-button py-2 px-6 font-bold rounded-md z-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={isLoading} // Disable the button while loading
+                    >
+                        {isLoading ? 'Submitting...' : 'SUBMIT'}
+                    </button>}
                 </div>
             </form>
         </>

@@ -126,6 +126,7 @@ const GlobalStyles: FC = () => (
       height: 100%;
       background: #0a0a10;
       overflow: hidden;
+      z-index:20;
     }
     .glitch-heading::before {
       left: 2px;

@@ -34,7 +34,7 @@ const PlexusBackground: FC = () => {
 
             // Re-initialize particles for the new screen size
             particles = [];
-            const particleCount = window.innerWidth < 768 ? 50 : 100;
+            const particleCount = window.innerWidth < 768 ? 60 : 110;
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,

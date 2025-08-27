@@ -81,31 +81,54 @@ const customStyles: StylesConfig<SkillOption, true> = {
 };
 
 const SkillsInput: FC<SkillsInputProps> = ({ value, onChange }) => {
-    // This state ensures document.body is only accessed on the client-side
+
+
+    const [skillOptions, setSkillOptions] = useState<SkillOption[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
+
+    // 3. Use useEffect to fetch skills from the API when the component mounts.
     useEffect(() => {
         setIsMounted(true);
+
+        // Replace with your actual Raw GitHub Gist URL
+        const skillsApiUrl = 'https://gist.githubusercontent.com/AritraBose10/07ccd7f5a103bb16cb8ebe6d7864ba45/raw/1324c677428ad86badd8afe0ce5465dc2b75ffba/skills.json';
+
+        fetch(skillsApiUrl)
+            .then(res => res.json())
+            .then((data: SkillOption[]) => {
+                setSkillOptions(data);
+            })
+            .catch(err => {
+                console.error("Failed to fetch skills:", err);
+                // You could set an error state here
+            })
+            .finally(() => {
+                setIsLoading(false); // Stop loading whether it succeeded or failed
+            });
     }, []);
 
     return (
         <Select
+            // 4. Update the <Select> component to use the new state.
             isMulti
             instanceId="skills-select"
-            options={allSkills}
+            options={skillOptions}
+            isLoading={isLoading} // Shows a loading indicator
             value={value}
             onChange={onChange}
             styles={customStyles}
             placeholder="Search and select up to 5 skills..."
             isOptionDisabled={() => value.length >= 5}
             noOptionsMessage={() =>
-                value.length >= 5
-                    ? "You've reached the maximum of 5 skills."
-                    : "No skills found."
+                isLoading
+                    ? "Loading skills..."
+                    : value.length >= 5
+                        ? "You've reached the maximum of 5 skills."
+                        : "No skills found."
             }
-            // --- THIS IS THE FIX ---
             menuPortalTarget={isMounted ? document.body : null}
             menuPosition={'fixed'}
-        // ---------------------
         />
     );
 };
