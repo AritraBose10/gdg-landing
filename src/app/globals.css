@@ -127,4 +127,5 @@ main::after {
   align-items: center;
   justify-content: center;
   transform: rotateY(180deg);
+  z-index: 10;
 }

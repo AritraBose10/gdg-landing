@@ -30,7 +30,7 @@ interface FormField {
     color: string;
     delay: string;
     required?: boolean;
-    options?: string[];
+    options?: string[] | { value: string; label: string; }[];
     text?: string;
 }
 
@@ -42,8 +42,8 @@ interface HologramFormProps {
 // --- UPDATED: Form Configuration ---
 const initialFormData: FormData = {
     name: '',
-    batchYear: '',
-    year: '',
+    batchYear: '2025',
+    year: '2nd Year',
     studentId: '',
     email: '',
     phoneNumber: '',
@@ -64,7 +64,20 @@ const formSteps: FormField[][] = [
     ],
     // Step 2: Contact & Professional Info
     [
-        { id: 'domain', label: 'Preferred Domain', type: 'domain', color: '#4285F4', delay: '0.5s', options: ['AI/ML', 'Cloud', 'Web Development', 'Android Development', 'Design'] },
+        {
+            id: 'domain',
+            label: 'Preferred Domain(s)',
+            type: 'domain',
+            color: '#4285F4',
+            delay: '0.5s',
+            options: [
+                { value: 'ai-ml', label: 'AI/ML' },
+                { value: 'cloud', label: 'Cloud' },
+                { value: 'web-dev', label: 'Web Development' },
+                { value: 'android-dev', label: 'Android Development' },
+                { value: 'design', label: 'Design' }
+            ]
+        },
         { id: 'email', label: 'Email Address', type: 'email', color: '#F4B400', delay: '0.5s' },
         { id: 'phoneNumber', label: 'Phone Number', type: 'tel', color: '#DB4437', delay: '0.8s' },
 
@@ -102,20 +115,29 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
     const handleNext = () => setCurrentStep(prev => prev + 1);
     const handleBack = () => setCurrentStep(prev => prev - 1);
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log('Final Form Data:', formData);
+        console.log('Sending final form data:', formData);
 
-        // Simulate an API call and randomly succeed or fail
-        setTimeout(() => {
-            if (Math.random() > 0.5) {
-                onSuccess();
+        try {
+            const response = await fetch('/api/submit-application', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                console.log('Submission successful!');
+                onSuccess(); // Trigger the success page
             } else {
-                onFailure();
+                console.error('Submission failed on the server.');
+                onFailure(); // Trigger the failure page
             }
-        }, 1000);
+        } catch (error) {
+            console.error('An error occurred while submitting:', error);
+            onFailure(); // Trigger the failure page
+        }
     };
-
     const totalSteps = formSteps.length;
 
     return (

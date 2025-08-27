@@ -4,7 +4,8 @@ import { useTheme } from 'next-themes';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FC, useEffect, useRef, useState } from 'react';
 import { IconBackground } from '../components/IconBackground'; // Assuming you create this file
 import { ShuffleWords } from '../components/ShuffleWords'; // Assuming you create this file
 
@@ -61,6 +62,8 @@ const Page: FC = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const router = useRouter();
+  const backFaceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -92,7 +95,7 @@ const Page: FC = () => {
   return (
     <main id="landing-page-main" className="h-screen font-sans overflow-hidden flex flex-col">
       <IconBackground />
-      <header className="w-full relative z-5000">
+      <header className="w-full relative z-30">
         <div className="absolute top-0 left-0 px-1 py-4">
           {mounted && (
             <Image
@@ -117,7 +120,7 @@ const Page: FC = () => {
           {renderThemeChanger()}
         </div>
       </header>
-      <div className="flex-grow flex items-center justify-center relative z-999 p-4">
+      <div className="flex-grow flex items-center justify-center relative z-40 p-4">
         <div className={`flip-card ${isFlipped ? 'is-flipped' : ''}`}>
           <div className="flip-card-inner">
 
@@ -136,7 +139,13 @@ const Page: FC = () => {
               </p>
               <button
                 type="button"
-                onClick={() => setIsFlipped(true)}
+                onClick={() => {
+                  setIsFlipped(true);
+
+                  setTimeout(() => {
+                    backFaceRef.current?.querySelector('button')?.focus();
+                  }, 300);
+                }}
                 className="glowing-btn mt-6 sm:mt-8 inline-block px-10 py-3 bg-[#1a73e8] text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105"
               >
                 Register for Interviews
@@ -144,7 +153,7 @@ const Page: FC = () => {
             </div>
 
             {/* Back of the Card */}
-            <div className="flip-card-back">
+            <div className="flip-card-back" ref={backFaceRef}>
               <h2 className="text-3xl sm:text-4xl font-bold mb-8">Choose Your Path</h2>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-5">
                 <Link href="/technical">
@@ -159,7 +168,8 @@ const Page: FC = () => {
                 <Link href="/non-technical">
                   <button
                     type="button"
-                    className="glowing-btn inline-block text-center px-8 py-3 bg-purple-500 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105"
+
+                    className="glowing-btn px-8 py-3 bg-purple-500 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-lg transform hover:scale-105"
                   >
                     Non-Technical Team
                   </button>

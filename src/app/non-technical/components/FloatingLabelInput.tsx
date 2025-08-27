@@ -8,13 +8,13 @@ interface FloatingLabelInputProps {
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     children?: React.ReactNode;
-    required: boolean;
+    required?: boolean;
 }
 
-const FloatingLabelInput: FC<FloatingLabelInputProps> = ({ id, label, type = 'text', value, onChange, children }) => {
+const FloatingLabelInput: FC<FloatingLabelInputProps> = ({ id, label, type = 'text', value, onChange, children, required = true }) => {
     const commonProps = {
         id,
-        required: true,
+        required,
         className: "form-input w-full",
         placeholder: " ",
         value,

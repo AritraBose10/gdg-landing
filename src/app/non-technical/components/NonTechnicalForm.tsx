@@ -25,20 +25,29 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
     const handleBack = () => setStep(prev => prev - 1);
 
     // 2. Update handleSubmit to use the props
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log(`Non-Technical Form Submitted:\n${JSON.stringify(formData, null, 2)}`);
+        console.log('Sending final form data:', formData);
 
-        // Simulate an API call and randomly succeed or fail
-        setTimeout(() => {
-            if (Math.random() > 0.5) {
-                onSuccess(); // Report success
+        try {
+            const response = await fetch('/api/submit-application', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                console.log('Submission successful!');
+                onSuccess(); // Trigger the success page
             } else {
-                onFailure(); // Report failure
+                console.error('Submission failed on the server.');
+                onFailure(); // Trigger the failure page
             }
-        }, 1000);
+        } catch (error) {
+            console.error('An error occurred while submitting:', error);
+            onFailure(); // Trigger the failure page
+        }
     };
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { id, value } = e.target;
         setFormData(prev => ({ ...prev, [id]: value }));
