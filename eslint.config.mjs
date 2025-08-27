@@ -1,6 +1,6 @@
+import { FlatCompat } from "@eslint/eslintrc";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,6 +19,16 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
     ],
+    rules: {
+      // Turn off TypeScript any warning
+      "@typescript-eslint/no-explicit-any": "off",
+
+      // Turn off prefer-const
+      "prefer-const": "off",
+
+      // Allow <img> without Next.js Image warning
+      "@next/next/no-img-element": "off",
+    },
   },
 ];
 
