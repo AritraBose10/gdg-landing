@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import { IconBackground } from '../components/IconBackground'; // Assuming you create this file
@@ -56,7 +57,7 @@ const MoonIcon: FC<{ className?: string }> = ({ className }) => (
 );
 
 const Page: FC = () => {
-  const words: string[] = ["AI/ML", "Cloud", "Web Dev", "Android", "Design"];
+  const words: string[] = ["AI/ML", "Cloud", "Web Dev", "Android", "Design", "Web3", "Creative Media", "DSA"];
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -91,13 +92,29 @@ const Page: FC = () => {
   return (
     <main id="landing-page-main" className="h-screen font-sans overflow-hidden flex flex-col">
       <IconBackground />
-      <header className="w-full p-4 z-30">
-        <div className="container mx-auto flex justify-between items-center">
-          <img src="https://placehold.co/140x40/000000/FFFFFF?text=GDG" height="30" width="100" alt="GDG Logo" className="dark:invert" />
-          <div className="flex items-center gap-4">
-            <img src="https://placehold.co/80x40/000000/FFFFFF?text=TIU" height="25" width="60" alt="TIU Logo" className="dark:invert" />
-            {renderThemeChanger()}
-          </div>
+      <header className="w-full relative z-30">
+        <div className="absolute top-0 left-0 px-1 py-4">
+          {mounted && (
+            <Image
+              src={theme === 'dark' ? "/logos/gdgdark.png" : "/logos/gdglight.png"}
+              height={60}
+              width={140}
+              alt="GDG Logo"
+            />
+          )}
+        </div>
+
+        {/* Positioned at the absolute top-right corner */}
+        <div className="absolute top-0 right-0 py-4 px-1 gap-4 flex items-center">
+          {mounted && (
+            <Image
+              src={theme === 'dark' ? '/logos/tiudark.png' : '/logos/tiulight.png'}
+              height={75}
+              width={160}
+              alt="TIU Logo"
+            />
+          )}
+          {renderThemeChanger()}
         </div>
       </header>
       <div className="flex-grow flex items-center justify-center relative z-20 p-4">

@@ -1,20 +1,42 @@
 "use client";
-import { FC, FormEvent, useState } from 'react';
+
+import React, { FC, FormEvent, useState } from 'react';
 import FloatingLabelInput from './FloatingLabelInput';
 import ProgressBar from './ProgressBar';
 
-const NonTechnicalForm: FC = () => {
+// 1. Add props to communicate with the parent page
+interface NonTechnicalFormProps {
+    onSuccess: () => void;
+    onFailure: () => void;
+}
+
+const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) => {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
-        name: '', email: '', role: 'Events Lead', statement: ''
+        name: '',
+        email: '',
+        role: 'Public Relations and OutReach',
+        portfolioLink: '',
+        statement: ''
     });
     const totalSteps = 3;
 
     const handleNext = () => setStep(prev => prev + 1);
     const handleBack = () => setStep(prev => prev - 1);
+
+    // 2. Update handleSubmit to use the props
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        alert(`Application Submitted:\n${JSON.stringify(formData, null, 2)}`);
+        console.log(`Non-Technical Form Submitted:\n${JSON.stringify(formData, null, 2)}`);
+
+        // Simulate an API call and randomly succeed or fail
+        setTimeout(() => {
+            if (Math.random() > 0.5) {
+                onSuccess(); // Report success
+            } else {
+                onFailure(); // Report failure
+            }
+        }, 1000);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -22,28 +44,39 @@ const NonTechnicalForm: FC = () => {
         setFormData(prev => ({ ...prev, [id]: value }));
     };
 
+    const showPortfolioField = formData.role === 'Design' || formData.role === 'Creative Media';
+
     return (
         <>
             <ProgressBar currentStep={step} totalSteps={totalSteps} />
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                {/* Step 1 and 2 content remains the same */}
                 {step === 1 && (
                     <div key="step1" className="space-y-6" style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                        <FloatingLabelInput id="name" label="Full Name" value={formData.name} onChange={handleChange} />
-                        <FloatingLabelInput id="email" type="email" label="Email Address" value={formData.email} onChange={handleChange} />
+                        <FloatingLabelInput id="name" label="Full Name" value={formData.name} onChange={handleChange} required={true} />
+                        <FloatingLabelInput id="email" type="email" label="Email Address" value={formData.email} onChange={handleChange} required={true} />
                     </div>
                 )}
                 {step === 2 && (
                     <div key="step2" className="space-y-6" style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                        <FloatingLabelInput id="role" type="select" label="Preferred Role" value={formData.role} onChange={handleChange}>
-                            <option>Events Lead</option>
-                            <option>Marketing & Outreach Lead</option>
-                            <option>Community Manager</option>
+                        <FloatingLabelInput id="role" type="select" label="Preferred Role" value={formData.role} onChange={handleChange} required={true} >
+                            <option>Public Relations and OutReach</option>
+                            <option>Social Media Handling</option>
+                            <option>Creative Media</option>
+                            <option>Operations and Management</option>
+                            <option>Design</option>
                         </FloatingLabelInput>
+
+                        {showPortfolioField && (
+                            <div style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
+                                <FloatingLabelInput id="portfolioLink" type="url" label="Portfolio Link (Optional)" value={formData.portfolioLink} onChange={handleChange} required={false} />
+                            </div>
+                        )}
                     </div>
                 )}
                 {step === 3 && (
                     <div key="step3" className="space-y-6" style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                        <FloatingLabelInput id="statement" type="textarea" label="Why are you passionate about tech communities?" value={formData.statement} onChange={handleChange} />
+                        <FloatingLabelInput id="statement" type="textarea" label="Why are you passionate about tech communities?" value={formData.statement} onChange={handleChange} required={true} />
                     </div>
                 )}
                 <div className="flex justify-between items-center pt-4">

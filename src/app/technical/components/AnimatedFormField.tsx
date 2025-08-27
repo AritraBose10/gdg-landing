@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, HTMLInputTypeAttribute, ReactNode } from 'react';
+import DomainInput from './DomainInput';
 import SkillsInput from './SkillsInput'; // Import the new SkillsInput
 
 interface AnimatedFormFieldProps {
@@ -25,7 +26,7 @@ const AnimatedFormField: FC<AnimatedFormFieldProps> = ({ id, label, type = 'text
         if (type === 'textarea') return <textarea {...commonProps} rows={3} className={`${className} resize-none`} />;
         if (type === 'select') return <select {...commonProps} className={`${className} appearance-none bg-[#0a0a10] custom-select`}>{children}</select>;
         if (type === 'skills') return <SkillsInput value={value} onChange={onChange} />;
-
+        if (type === 'domain') return <DomainInput value={value} onChange={onChange} />;
         if (type === 'checkbox') {
             return (
                 <div className="flex items-center gap-3 mt-2">
@@ -39,7 +40,7 @@ const AnimatedFormField: FC<AnimatedFormFieldProps> = ({ id, label, type = 'text
     };
 
     return (
-        <div className="relative opacity-0" style={{ animation: `reveal-content ${animationDuration} ease-out ${animationDelay} forwards` }}>
+        <div className="relative opacity-0 " style={{ animation: `reveal-content ${animationDuration} ease-out ${animationDelay} forwards` }}>
             <span
                 className="absolute top-0 left-0 w-full h-full"
                 style={{ animation: `reveal-mask ${animationDuration} ease-out ${animationDelay} forwards`, backgroundColor: color }}

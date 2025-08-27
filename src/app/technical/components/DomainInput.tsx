@@ -15,17 +15,14 @@ interface SkillsInputProps {
 }
 
 // --- Component ---
-const allSkills: SkillOption[] = [
-    { value: 'react', label: 'React.js' },
-    { value: 'nextjs', label: 'Next.js' },
-    { value: 'typescript', label: 'TypeScript' },
-    { value: 'python', label: 'Python' },
-    { value: 'figma', label: 'Figma' },
-    { value: 'firebase', label: 'Firebase' },
-    { value: 'gcp', label: 'Google Cloud Platform' },
-    { value: 'android', label: 'Android (Kotlin/Java)' },
-    { value: 'public-speaking', label: 'Public Speaking' },
-    { value: 'event-management', label: 'Event Management' },
+const allDomains: SkillOption[] = [
+    { value: 'ai-ml', label: 'AI/ML' },
+    { value: 'cloud', label: 'Cloud' },
+    { value: 'web-dev', label: 'Web Development' },
+    { value: 'android-dev', label: 'Android' },
+    { value: 'design', label: 'Design' },
+    { value: 'web3', label: 'Web3' },
+    { value: 'dsa', label: 'DSA' }
 ];
 
 const customStyles: StylesConfig<SkillOption, true> = {
@@ -80,34 +77,24 @@ const customStyles: StylesConfig<SkillOption, true> = {
     }),
 };
 
-const SkillsInput: FC<SkillsInputProps> = ({ value, onChange }) => {
-    // This state ensures document.body is only accessed on the client-side
+const DomainInput: FC<SkillsInputProps> = ({ value, onChange }) => {
     const [isMounted, setIsMounted] = useState(false);
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    useEffect(() => { setIsMounted(true); }, []);
 
     return (
         <Select
             isMulti
-            instanceId="skills-select"
-            options={allSkills}
+            instanceId="domain-select"
+            options={allDomains}
             value={value}
             onChange={onChange}
             styles={customStyles}
-            placeholder="Search and select up to 5 skills..."
-            isOptionDisabled={() => value.length >= 5}
-            noOptionsMessage={() =>
-                value.length >= 5
-                    ? "You've reached the maximum of 5 skills."
-                    : "No skills found."
-            }
-            // --- THIS IS THE FIX ---
+            placeholder="Search and select domain(s)..."
             menuPortalTarget={isMounted ? document.body : null}
             menuPosition={'fixed'}
-        // ---------------------
+        // C. Removed the isOptionDisabled and noOptionsMessage props
         />
     );
 };
 
-export default SkillsInput;
+export default DomainInput;

@@ -8,6 +8,7 @@ interface FloatingLabelInputProps {
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     children?: React.ReactNode;
+    required: boolean;
 }
 
 const FloatingLabelInput: FC<FloatingLabelInputProps> = ({ id, label, type = 'text', value, onChange, children }) => {

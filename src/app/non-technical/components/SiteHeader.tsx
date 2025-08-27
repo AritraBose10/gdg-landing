@@ -1,4 +1,5 @@
 "use client";
+import Image from 'next/image';
 import { FC, useEffect, useRef } from 'react';
 
 const SiteHeader: FC = () => {
@@ -19,10 +20,25 @@ const SiteHeader: FC = () => {
     }, []);
 
     return (
-        <header className="w-full p-4 absolute top-0 left-0">
-            <div className="container mx-auto flex justify-between items-center">
-                <img ref={gdgLogoRef} src="https://placehold.co/140x40/FFFFFF/000000?text=GDG" height="30" width="100" alt="GDG Logo" className="invert transition-transform duration-300 ease-out" />
-                <img ref={tiuLogoRef} src="https://placehold.co/80x40/FFFFFF/000000?text=TIU" height="25" width="60" alt="TIU Logo" className="invert transition-transform duration-300 ease-out" />
+        <header className="w-full relative z-30">
+            {/* Positioned at the absolute top-left corner */}
+            <div className="absolute top-0 left-0 px-1 py-4">
+                <Image
+                    src="/logos/gdgdark.png" // Direct path to your GDG logo
+                    height={60}
+                    width={140}
+                    alt="GDG Logo"
+                />
+            </div>
+
+            {/* Positioned at the absolute top-right corner */}
+            <div className="absolute top-0 right-0 py-4 px-2">
+                <Image
+                    src="/logos/tiudark.png" // Direct path to your TIU logo
+                    height={75}
+                    width={160}
+                    alt="TIU Logo"
+                />
             </div>
         </header>
     );

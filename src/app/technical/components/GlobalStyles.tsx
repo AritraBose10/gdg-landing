@@ -3,11 +3,12 @@
 import { FC } from "react";
 
 const GlobalStyles: FC = () => (
-    <style jsx global>{`
+  <style jsx global>{`
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
 
     body {
         border: 5px solid red !important;
+        overflow:hidden;
       }
 
     /* --- Animations --- */
@@ -168,6 +169,17 @@ const GlobalStyles: FC = () => (
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .hologram-input:focus { outline: none; }
+    .hologram-select-bg {
+      background-color: #0a0a10;
+    }
+    select.form-input, select.hologram-input {
+      background-color: #11111b; /* A solid, dark color similar to your theme */
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a0aec0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+    }
 
     /* Add these styles to your existing file */
 .hud-button-success {
