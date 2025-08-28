@@ -58,7 +58,7 @@ const MoonIcon: FC<{ className?: string }> = ({ className }) => (
 );
 
 const Page: FC = () => {
-  const words: string[] = ["AI/ML", "Cloud", "Web Dev", "Android", "Design", "Web3", "Creative Media", "DSA"];
+  const words: string[] = ["AI/ML", "Cloud", "Web Dev", "Android", "Design", "Web3", "Creative Media", "DSA", "Game Dev", "Robotics", "CyberSecurity"];
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);

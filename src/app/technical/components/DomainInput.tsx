@@ -22,7 +22,9 @@ const allDomains: SkillOption[] = [
     { value: 'android-dev', label: 'Android' },
     { value: 'web3', label: 'Web3' },
     { value: 'dsa', label: 'DSA' },
-    { value: 'Robotics', label: 'Robotics' }
+    { value: 'Robotics', label: 'Robotics' },
+    { value: 'cybersec', label: 'CyberSecurity' },
+    { value: 'gamedev', label: 'Game Development' }
 ];
 
 const customStyles: StylesConfig<SkillOption, true> = {
