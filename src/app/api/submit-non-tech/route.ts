@@ -146,8 +146,7 @@ export async function POST(request: Request) {
                             <!-- Footer -->
                             <tr>
                                 <td align="center" style="padding: 24px 20px; font-family: Roboto, Arial, sans-serif; font-size: 12px; line-height: 18px; color: #5f6368;">
-                                    You received this email because you applied for a position at GDG On Campus TIU.<br>
-                                    GDG On Campus TIU &bull; 123 University Lane, Knowledge City, 12345
+                                    You received this email because you applied for a position at GDG On Campus TIU.
                                 </td>
                             </tr>
                         </table>

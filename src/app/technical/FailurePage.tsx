@@ -7,7 +7,7 @@ const failureLines = [
     { text: "> INITIATING TRANSMISSION...", className: "text-gray-400" },
     { text: "> Connecting to server...", className: "text-[#fdd663]" },
     { text: "> ERROR: CONNECTION FAILED", className: "text-[#f28b82] font-bold" },
-    { text: "> Packet loss detected. Please check your connection.", className: "text-gray-400" },
+    { text: "> Check the Required Fields -> Else Retry Transmission", className: "text-gray-400" },
     { text: "> Application submission terminated.", className: "text-gray-400" },
 ];
 

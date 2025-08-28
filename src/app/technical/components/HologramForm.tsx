@@ -42,7 +42,7 @@ interface HologramFormProps {
 // --- UPDATED: Form Configuration ---
 const initialFormData: FormData = {
     name: '',
-    batchYear: '2025',
+    batchYear: '',
     year: '2nd Year',
     studentId: '',
     email: '',
@@ -59,7 +59,7 @@ const formSteps: FormField[][] = [
     [
         { id: 'name', label: 'Full Name', type: 'text', color: '#4285F4', delay: '0.5s', required: true },
         { id: 'studentId', label: 'Student ID', type: 'text', color: '#F4B400', delay: '0.8s', required: true },
-        { id: 'batchYear', label: 'Batch (e.g., 2025)', type: 'select', color: '#DB4437', delay: '1.1s', options: ['2025', '2026', '2027', '2028'], required: true },
+        { id: 'batchYear', label: 'Batch (e.g. BCS 2A)', type: 'text', color: '#DB4437', delay: '1.1s', required: true },
         { id: 'year', label: 'Year of Study', type: 'select', color: '#0F9D58', delay: '1.4s', options: ['2nd Year', '3rd Year', '4th Year'], required: true },
     ],
     // Step 2: Contact & Professional Info
