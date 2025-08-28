@@ -121,7 +121,7 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/submit-application', {
+            const response = await fetch('/api/submit-tech', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -182,7 +182,7 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
                     <button type="button" onClick={handleNext} className="hologram-button py-2 px-6 font-bold rounded-md z-50">Next &rarr;</button>
                 ) : (
                     <button
-                        type="button"
+                        type="submit"
                         className="hologram-button py-2 px-6 font-bold rounded-md z-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isLoading} // Disable the button while loading
                     >

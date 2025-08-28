@@ -31,7 +31,7 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/submit-application', {
+            const response = await fetch('/api/submit-non-tech', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

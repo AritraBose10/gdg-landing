@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
         console.log("STEP 2: Attempting to write to Firestore...");
 
-        const docRef = await addDoc(collection(db, "applications"), {
+        const docRef = await addDoc(collection(db, "non-tech-applications"), {
             ...formData,
             submittedAt: new Date(),
         });
