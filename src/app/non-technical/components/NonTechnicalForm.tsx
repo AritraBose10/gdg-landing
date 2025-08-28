@@ -14,12 +14,16 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         name: '',
+        year: '2nd Year',
+        batch: '',
+        phoneNumber: '',
+        id: '',
         email: '',
         role: 'Public Relations and OutReach',
         portfolioLink: '',
         statement: ''
     });
-    const totalSteps = 3;
+    const totalSteps = 4;
 
     const handleNext = () => setStep(prev => prev + 1);
     const handleBack = () => setStep(prev => prev - 1);
@@ -63,16 +67,78 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
         <>
             <ProgressBar currentStep={step} totalSteps={totalSteps} />
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-                {/* Step 1 and 2 content remains the same */}
+                {/* Step 1: Name, Year, Batch */}
                 {step === 1 && (
-                    <div key="step1" className="space-y-6" style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                        <FloatingLabelInput id="name" label="Full Name" value={formData.name} onChange={handleChange} required={true} />
-                        <FloatingLabelInput id="email" type="email" label="Email Address" value={formData.email} onChange={handleChange} required={true} />
+                    <div key="step1" className="space-y-6">
+                        <FloatingLabelInput
+                            id="name"
+                            label="Full Name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <FloatingLabelInput
+                            id="year"
+                            type="select"
+                            label="Year"
+                            value={formData.year}
+                            onChange={handleChange}
+                            required
+                        >
+
+                            <option>2nd Year</option>
+                            <option>3rd Year</option>
+                            <option>4th Year</option>
+                        </FloatingLabelInput>
+                        <FloatingLabelInput
+                            id="batch"
+                            label="Batch"
+                            value={formData.batch}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
                 )}
+
+                {/* Step 2: Email, Phone, College ID */}
                 {step === 2 && (
-                    <div key="step2" className="space-y-6" style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                        <FloatingLabelInput id="role" type="select" label="Preferred Role" value={formData.role} onChange={handleChange} required={true} >
+                    <div key="step2" className="space-y-6">
+                        <FloatingLabelInput
+                            id="email"
+                            type="email"
+                            label="Email Address"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                        <FloatingLabelInput
+                            id="phoneNumber"
+                            label="Phone Number"
+                            value={formData.phoneNumber}
+                            onChange={handleChange}
+                            required
+                        />
+                        <FloatingLabelInput
+                            id="id"
+                            label="College ID"
+                            value={formData.id}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                )}
+
+                {/* Step 3: Role & Portfolio */}
+                {step === 3 && (
+                    <div key="step3" className="space-y-6">
+                        <FloatingLabelInput
+                            id="role"
+                            type="select"
+                            label="Preferred Role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            required
+                        >
                             <option>Public Relations and OutReach</option>
                             <option>Social Media Handling</option>
                             <option>Creative Media</option>
@@ -81,28 +147,66 @@ const NonTechnicalForm: FC<NonTechnicalFormProps> = ({ onSuccess, onFailure }) =
                         </FloatingLabelInput>
 
                         {showPortfolioField && (
-                            <div style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                                <FloatingLabelInput id="portfolioLink" type="url" label="Portfolio Link (Optional)" value={formData.portfolioLink} onChange={handleChange} required={false} />
-                            </div>
+                            <FloatingLabelInput
+                                id="portfolioLink"
+                                type="url"
+                                label="Portfolio Link (Optional)"
+                                value={formData.portfolioLink}
+                                onChange={handleChange}
+                            />
                         )}
                     </div>
                 )}
-                {step === 3 && (
-                    <div key="step3" className="space-y-6" style={{ animation: 'slide-in-up 0.5s ease-out forwards' }}>
-                        <FloatingLabelInput id="statement" type="textarea" label="Why are you passionate about tech communities?" value={formData.statement} onChange={handleChange} required={true} />
+
+                {/* Step 4: Statement */}
+                {step === 4 && (
+                    <div key="step4" className="space-y-6">
+                        <FloatingLabelInput
+                            id="statement"
+                            type="textarea"
+                            label="Why are you passionate about tech communities?"
+                            value={formData.statement}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
                 )}
+
+                {/* Navigation Buttons */}
                 <div className="flex justify-between items-center pt-4">
-                    {step > 1 ? <button type="button" onClick={handleBack} className="plexus-button py-2 px-6 font-bold text-base rounded-full">Back</button> : <div />}
-                    {step < totalSteps ? <button type="button" onClick={handleNext} className="plexus-button py-2 px-6 font-bold text-base rounded-full">Next</button> : <button
-                        type="submit"
-                        className="hologram-button py-2 px-6 font-bold rounded-md z-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={isLoading} // Disable the button while loading
-                    >
-                        {isLoading ? 'Submitting...' : 'SUBMIT'}
-                    </button>}
+                    {step > 1 ? (
+                        <button
+                            type="button"
+                            onClick={handleBack}
+                            className="plexus-button py-2 px-6 font-bold text-base rounded-full"
+                        >
+                            Back
+                        </button>
+                    ) : (
+                        <div />
+                    )}
+
+                    {step < totalSteps ? (
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            className="plexus-button py-2 px-6 font-bold text-base rounded-full"
+                        >
+                            Next
+                        </button>
+                    ) : (
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="hologram-button py-2 px-6 font-bold rounded-md z-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isLoading ? 'Submitting...' : 'SUBMIT'}
+                        </button>
+                    )}
                 </div>
             </form>
+
+
         </>
     );
 };
