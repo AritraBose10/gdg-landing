@@ -174,7 +174,7 @@ export async function POST(request: Request) {
             from: `"GDG On Campus TIU" <${process.env.GMAIL_EMAIL}>`,
             to: formData.email,
             subject: 'Application Received - GDG On Campus TIU',
-            html: `emailHtml`,
+            html: emailHtml,
         });
 
         return NextResponse.json({ message: "Application submitted successfully!", id: docRef.id }, { status: 200 });
