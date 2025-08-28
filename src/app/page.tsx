@@ -64,11 +64,24 @@ const Page: FC = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const router = useRouter();
   const backFaceRef = useRef<HTMLDivElement>(null);
+  const frontFaceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-  // Add this entire function
+  // Add this entire useEffect hook to your Page component
+  useEffect(() => {
+    const frontFace = frontFaceRef.current;
+    if (frontFace) {
+      if (isFlipped) {
+        // Make the front face inert (non-interactive) when flipped
+        frontFace.setAttribute('inert', 'true');
+      } else {
+        // Make it interactive again when not flipped
+        frontFace.removeAttribute('inert');
+      }
+    }
+  }, [isFlipped]);
   const renderThemeChanger = () => {
     if (!mounted) return null;
 
@@ -125,7 +138,7 @@ const Page: FC = () => {
           <div className="flip-card-inner">
 
             {/* Front of the Card */}
-            <div className="flip-card-front">
+            <div className="flip-card-front" ref={frontFaceRef}>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight flex flex-col items-center">
                 Join the
                 <br />
