@@ -20,9 +20,9 @@ const allDomains: SkillOption[] = [
     { value: 'cloud', label: 'Cloud' },
     { value: 'web-dev', label: 'Web Development' },
     { value: 'android-dev', label: 'Android' },
-    { value: 'design', label: 'Design' },
     { value: 'web3', label: 'Web3' },
-    { value: 'dsa', label: 'DSA' }
+    { value: 'dsa', label: 'DSA' },
+    { value: 'Robotics', label: 'Robotics' }
 ];
 
 const customStyles: StylesConfig<SkillOption, true> = {

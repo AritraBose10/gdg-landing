@@ -14,19 +14,6 @@ interface SkillsInputProps {
     onChange: (selectedOptions: OnChangeValue<SkillOption, true>) => void;
 }
 
-// --- Component ---
-const allSkills: SkillOption[] = [
-    { value: 'react', label: 'React.js' },
-    { value: 'nextjs', label: 'Next.js' },
-    { value: 'typescript', label: 'TypeScript' },
-    { value: 'python', label: 'Python' },
-    { value: 'figma', label: 'Figma' },
-    { value: 'firebase', label: 'Firebase' },
-    { value: 'gcp', label: 'Google Cloud Platform' },
-    { value: 'android', label: 'Android (Kotlin/Java)' },
-    { value: 'public-speaking', label: 'Public Speaking' },
-    { value: 'event-management', label: 'Event Management' },
-];
 
 const customStyles: StylesConfig<SkillOption, true> = {
     control: (provided) => ({

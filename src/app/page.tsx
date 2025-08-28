@@ -112,7 +112,7 @@ const Page: FC = () => {
         <div className="absolute top-0 left-0 px-1 py-4">
           {mounted && (
             <Image
-              src={theme === 'dark' ? "/logos/gdgdark.png" : "/logos/gdglight.png"}
+              src={theme === 'dark' ? "/logos/gdgdark.png" : "/logos/gdgdark.png"}
               height={60}
               width={140}
               alt="GDG Logo"
@@ -124,7 +124,7 @@ const Page: FC = () => {
         <div className="absolute top-0 right-0 py-4 px-1 gap-4 flex items-center">
           {mounted && (
             <Image
-              src={theme === 'dark' ? '/logos/tiudark.png' : '/logos/tiulight.png'}
+              src={theme === 'dark' ? '/logos/tiudark.png' : '/logos/tiudark.png'}
               height={75}
               width={160}
               alt="TIU Logo"
