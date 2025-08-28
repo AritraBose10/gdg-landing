@@ -43,8 +43,7 @@ export async function POST(request: Request) {
             },
         });
 
-        const domainString = formData.domain.map(d => d.label).join(', ');
-
+        const domainString = formData.domain.map((domain: { label: string }) => domain.label).join(', ');
 
         const emailHtml = `<!DOCTYPE html>
         <html lang="en">
@@ -81,7 +80,7 @@ export async function POST(request: Request) {
                             <tr>
                                 <td align="center" style="padding: 20px 0;">
                                     <!-- TODO: Replace this placeholder with a direct URL to your own hosted logo image. -->
-                                    <img src="https://placehold.co/180x40/000000/FFFFFF?text=GDG+On+Campus" width="180" alt="GDG On Campus TIU Logo" style="display: block; border: 0px;"/>
+                                    <img src="https://i.ibb.co/3503GG2D/logo.png" width="180" alt="GDG On Campus TIU Logo" style="display: block; border: 0px;"/>
                                 </td>
                             </tr>
                             <!-- Main content card -->
@@ -107,10 +106,7 @@ export async function POST(request: Request) {
                                                 <!-- Table for icon and text alignment -->
                                                 <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto;">
                                                     <tr>
-                                                        <td align="center" style="padding-right: 10px;">
-                                                            <!-- TODO: Replace this placeholder with a direct URL to your own hosted checkmark image. -->
-                                                            <img src="https://placehold.co/28x28/4285F4/FFFFFF?text=%E2%9C%93" width="28" height="28" alt="✓" style="display: block; border-radius: 50%;">
-                                                        </td>
+
                                                         <td align="center" style="font-family: Arial, sans-serif; font-size: 28px; font-weight: 700; color: #202124;">
                                                             Application Received
                                                         </td>
@@ -121,7 +117,7 @@ export async function POST(request: Request) {
                                         <!-- Body Text -->
                                         <tr>
                                             <td align="center" style="font-family: Roboto, Arial, sans-serif; font-size: 16px; line-height: 26px; color: #5f6368; padding-bottom: 24px;">
-                                                Hi ${formData.name}, thank you for your interest in the <strong>${formData.domain}</strong> position. We've successfully received your application.
+                                                Hi ${formData.name}, thank you for your interest in the <strong>${domainString}</strong> position. We've successfully received your application.
                                             </td>
                                         </tr>
                                          <!-- Informational Box -->

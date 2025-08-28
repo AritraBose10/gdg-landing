@@ -85,7 +85,7 @@ const formSteps: FormField[][] = [
     // Step 3: Domain & Skills
     [
 
-        { id: 'experiences', label: 'Previous Experiences in Relevant Field', type: 'textarea', color: '#DB4437', delay: '1.1s', required: true },
+        { id: 'experiences', label: 'Resume or PortFolio Website Link', type: 'url', color: '#DB4437', delay: '1.1s', required: false },
         { id: 'linkedin', label: 'LinkedIn Profile URL (Optional)', type: 'url', color: '#F4B400', delay: '1.1s', required: false },
         { id: 'github', label: 'GitHub Profile URL (Optional)', type: 'url', color: '#0F9D58', delay: '1.4s', required: false },
 
