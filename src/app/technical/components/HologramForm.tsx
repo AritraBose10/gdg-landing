@@ -142,7 +142,7 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
             setIsLoading(false); // Set loading to false when done
         }
     };
-    const totalSteps = formSteps.length;
+    const totalSteps = 4;
 
     return (
         <form onSubmit={handleSubmit} className="mt-8">
@@ -182,9 +182,10 @@ const HologramForm: FC<HologramFormProps> = ({ onSuccess, onFailure }) => {
                     <button type="button" onClick={handleNext} className="hologram-button py-2 px-6 font-bold rounded-md z-50">Next &rarr;</button>
                 ) : (
                     <button
-                        type="submit"
+                        type="button"
                         className="hologram-button py-2 px-6 font-bold rounded-md z-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={isLoading} // Disable the button while loading
+                        disabled={isLoading}
+                        onClick={handleSubmit}// Disable the button while loading
                     >
                         {isLoading ? 'Submitting...' : 'SUBMIT'}
                     </button>
