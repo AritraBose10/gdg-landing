@@ -41,80 +41,134 @@ export async function POST(request: Request) {
                 pass: process.env.GMAIL_APP_PASSWORD,
             },
         });
+        const emailHtml = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="X-UA-Compatible" content="ie=edge">
+            <title>Application Received</title>
+            <style>
+                /* Basic resets for email clients */
+                body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+                table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+                img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+                body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+                /* Hide preheader text */
+                .preheader { display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; }
+            </style>
+        </head>
+        <body style="background-color: #f1f3f4; margin: 0 !important; padding: 20px 0 !important; font-family: Roboto, Arial, sans-serif;">
+            <!-- Preheader text for inbox preview -->
+            <span class="preheader">We've received your application for the ${formData.role} position. Here are the next steps.</span>
+
+            <!-- Main container table -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td align="center" style="background-color: #f1f3f4;">
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table align="center" border="0" cellspacing="0" cellpadding="0" width="600">
+                        <tr>
+                        <td align="center" valign="top" width="600">
+                        <![endif]-->
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                            <!-- Logo Header -->
+                            <tr>
+                                <td align="center" style="padding: 20px 0;">
+                                    <!-- TODO: Replace this placeholder with a direct URL to your own hosted logo image. -->
+                                    <img src="https://placehold.co/180x40/000000/FFFFFF?text=GDG+On+Campus" width="180" alt="GDG On Campus TIU Logo" style="display: block; border: 0px;"/>
+                                </td>
+                            </tr>
+                            <!-- Main content card -->
+                            <tr>
+                                <td align="center" valign="top" style="padding: 40px; background-color: #ffffff; border-radius: 8px; border: 1px solid #dadce0;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <!-- Google Colors Bar -->
+                                        <tr>
+                                            <td align="center" style="padding-bottom: 24px;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100" style="margin: 0 auto;">
+                                                    <tr>
+                                                        <td height="4" width="25" style="background-color: #4285F4; border-radius: 2px 0 0 2px;"></td>
+                                                        <td height="4" width="25" style="background-color: #DB4437;"></td>
+                                                        <td height="4" width="25" style="background-color: #F4B400;"></td>
+                                                        <td height="4" width="25" style="background-color: #0F9D58; border-radius: 0 2px 2px 0;"></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- Main Heading -->
+                                        <tr>
+                                            <td align="center" style="padding-bottom: 16px;">
+                                                <!-- Table for icon and text alignment -->
+                                                <table border="0" cellpadding="0" cellspacing="0" align="center" style="margin: 0 auto;">
+                                                    <tr>
+                                                        <td align="center" style="padding-right: 10px;">
+                                                            <!-- TODO: Replace this placeholder with a direct URL to your own hosted checkmark image. -->
+                                                            <img src="https://placehold.co/28x28/4285F4/FFFFFF?text=%E2%9C%93" width="28" height="28" alt="✓" style="display: block; border-radius: 50%;">
+                                                        </td>
+                                                        <td align="center" style="font-family: Arial, sans-serif; font-size: 28px; font-weight: 700; color: #202124;">
+                                                            Application Received
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- Body Text -->
+                                        <tr>
+                                            <td align="center" style="font-family: Roboto, Arial, sans-serif; font-size: 16px; line-height: 26px; color: #5f6368; padding-bottom: 24px;">
+                                                Hi ${formData.name}, thank you for your interest in the <strong>${formData.role}</strong> position. We've successfully received your application.
+                                            </td>
+                                        </tr>
+                                         <!-- Informational Box -->
+                                        <tr>
+                                            <td style="padding-bottom: 32px;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8f9fa; border-radius: 8px;">
+                                                    <tr>
+                                                        <td style="padding: 24px; font-family: Roboto, Arial, sans-serif; font-size: 15px; line-height: 22px; color: #3c4043;">
+                                                            <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold; color: #202124;">What's Next?</h3>
+                                                            Our team will carefully review your submission and get back to you shortly. We appreciate your patience during this process.
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <!-- Signature -->
+                                        <tr>
+                                            <td align="center" style="font-family: Roboto, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #5f6368; padding-top: 10px;">
+                                                Best Regards,<br>
+                                                <strong style="color: #3c4043;">The GDG On Campus TIU Team</strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <!-- Footer -->
+                            <tr>
+                                <td align="center" style="padding: 24px 20px; font-family: Roboto, Arial, sans-serif; font-size: 12px; line-height: 18px; color: #5f6368;">
+                                    You received this email because you applied for a position at GDG On Campus TIU.<br>
+                                    GDG On Campus TIU &bull; 123 University Lane, Knowledge City, 12345
+                                </td>
+                            </tr>
+                        </table>
+                        <!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>
+`;
+
 
         await transporter.sendMail({
             from: `"GDG On Campus TIU" <${process.env.GMAIL_EMAIL}>`,
             to: formData.email,
             subject: 'Application Received - GDG On Campus TIU',
-            html: `
-            <!DOCTYPE html>
-            <html lang="en">
-              <head>
-                <meta charset="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Application Received</title>
-              </head>
-              <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: Arial, sans-serif;">
-                <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                  <tr>
-                    <td align="center" style="padding:40px 0; background-color:#f3f4f6;">
-                      <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width:600px;">
-                        <tr>
-                          <td align="center" style="padding:40px; background-color:#ffffff; border-radius:12px;">
-                            <!-- Success Icon -->
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                              <tr>
-                                <td align="center" style="padding-bottom:24px;">
-                                  <div style="width:64px; height:64px; border-radius:50%; background-color:#d1fae5; display:inline-block; text-align:center; line-height:64px;">
-                                    <svg style="width:40px; height:40px; color:#0d9488;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                  </div>
-                                </td>
-                              </tr>
-                              <!-- Heading -->
-                              <tr>
-                                <td align="center" style="font-size:24px; font-weight:bold; color:#111827; padding-bottom:12px;">
-                                  Thank you, {{formData.name}}!
-                                </td>
-                              </tr>
-                              <!-- Body -->
-                              <tr>
-                                <td align="center" style="font-size:16px; line-height:24px; color:#4b5563; padding-bottom:24px;">
-                                  We have successfully received your application for the <strong>{{formData.role}}</strong> position.
-                                </td>
-                              </tr>
-                              <!-- Informational Box -->
-                              <tr>
-                                <td>
-                                  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f9fafb; border:1px solid #e5e7eb; border-radius:8px;">
-                                    <tr>
-                                      <td style="padding:20px; font-size:14px; line-height:20px; color:#4b5563;">
-                                        <h3 style="margin:0 0 8px 0; font-size:16px; font-weight:bold; color:#1f2937;">What's Next?</h3>
-                                        Our team will carefully review your submission and get back to you shortly regarding the next steps. Thank you for your patience.
-                                      </td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                              <!-- Signature -->
-                              <tr>
-                                <td align="center" style="font-size:14px; line-height:20px; color:#6b7280; padding-top:24px;">
-                                  Best Regards,<br>
-                                  <strong style="color:#374151;">The GDG On Campus TIU Team</strong>
-                                </td>
-                              </tr>
-                            </table>
-                            <!-- End content -->
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </body>
-            </html>
-            `,
+            html: emailHtml,
         });
 
         console.log("STEP 3: Successfully wrote to Firestore. Doc ID:", docRef.id);
