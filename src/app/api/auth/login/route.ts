@@ -7,7 +7,7 @@ const ALLOWED_ADMIN_EMAILS = [
     'gdgoncampustiu@gmail.com', 'subhasishsuv@gmail.com',
     'ishan.rc2005@gmail.com', 'ayankaghosh2005@gmail.com',
     'rabishankarmaityofficial@gmail.com', 'and24903@gmail.com',
-    'goenkakrish02@gmail.com','anuragroy485@gmail.com',
+    'goenkakrish02@gmail.com','anuragroy485@gmail.com','mishrashrayan07@gmail.com',
     'shubhbrj7@gmail.com','pradipsadhukhan16@gmail.com',
     'snehalghosh2004@gmail.com','mohakgupta500@gmail.com'
 ];
