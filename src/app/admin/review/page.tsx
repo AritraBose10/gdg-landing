@@ -100,26 +100,43 @@ export default function ApplicantReviewPage() {
     });
 }, [candidates, filters, searchQuery]);
 
-    useEffect(() => {
-        const fetchCandidates = async () => {
-            try {
-                const response = await fetch('/api/applications');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch applicants. Are you logged in?');
-                }
-                const data = await response.json();
-                // We'll keep the localStorage logic for saving decisions for now
-                const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
-                setCandidates(data.map((c: any) => ({ ...c, status: savedDecisions[c.id] || 'Pending' })));
-
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setIsLoading(false);
+   useEffect(() => {
+    const fetchCandidates = async () => {
+        try {
+            const response = await fetch('/api/applications');
+            if (!response.ok) {
+                throw new Error('Failed to fetch applicants. Are you logged in?');
             }
-        };
-        fetchCandidates();
-    }, []);
+            // 1. Get the raw, inconsistent data from the API
+            const rawData = await response.json();
+
+            // 2. Normalize the data to create a consistent structure for every candidate
+            const normalizedData = rawData.map((c, index) => ({
+                // --- Provide default fallbacks for properties that might be missing ---
+                id: c.id || `generated-id-${index}`, // Ensure every candidate has a unique key for React
+                name: c.name || 'No Name',
+                avatar: c.avatar || '', // Default to empty string; the onError will handle it
+                role: c.role || 'Applicant', // Provide a default role if missing
+                domain: c.domain || [], // CRITICAL: Ensure 'domain' is always an array
+                skills: c.skills || [], // CRITICAL: Ensure 'skills' is always an array to prevent crashes
+                batchYear: c.batchYear || c.batch || 'N/A', // Unify 'batchYear' and 'batch' keys
+                
+                // --- Spread the original data, letting our defaults be overridden if the property exists ---
+                ...c,
+            }));
+
+            // 3. Use the clean, normalized data to set your state
+            const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
+            setCandidates(normalizedData.map((c) => ({ ...c, status: savedDecisions[c.id] || 'Pending' })));
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    fetchCandidates();
+}, []);
 
 
 
