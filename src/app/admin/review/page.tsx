@@ -146,16 +146,16 @@ export default function ApplicantReviewPage() {
 
     // In your paginate function
 const paginate = (newDirection) => {
-    if (!currentCandidate) return;
+    // Get the current index from the state array
+    const currentIdx = currentIndex[0];
+    const newIndex = currentIdx + newDirection;
 
-    // FIX: Access the index from the state array
-    let newIndex = currentIndex[0] + newDirection; 
-
-    if (newIndex < 0) {
-        newIndex = filteredCandidates.length - 1;
-    } else if (newIndex >= filteredCandidates.length) {
-        newIndex = 0;
+    // Check if the new index is within the valid range (0 to length-1)
+    if (newIndex < 0 || newIndex >= filteredCandidates.length) {
+        return; // If not, do nothing and exit the function
     }
+
+    // If the new index is valid, update the state
     setCurrentIndex([newIndex, newDirection]);
 };
 
@@ -343,8 +343,27 @@ const paginate = (newDirection) => {
                             </AnimatePresence>
                         </div>
 
-                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => paginate(-1)} disabled={!currentCandidate} className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronLeft className="h-6 w-6 text-gray-700" /></motion.button>
-                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => paginate(1)} disabled={!currentCandidate} className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronRight className="h-6 w-6 text-gray-700" /></motion.button>
+                        <motion.button
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.9 }}
+    onClick={() => paginate(-1)}
+    // FIX: Disable if it's the FIRST card OR if there are no candidates
+    disabled={currentIndex[0] === 0 || !currentCandidate}
+    className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+>
+    <ChevronLeft className="h-6 w-6 text-gray-700" />
+</motion.button>
+
+<motion.button
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.9 }}
+    onClick={() => paginate(1)}
+    // FIX: Disable if it's the LAST card OR if there are no candidates
+    disabled={currentIndex[0] === filteredCandidates.length - 1 || !currentCandidate}
+    className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+>
+    <ChevronRight className="h-6 w-6 text-gray-700" />
+</motion.button>
                     </main>
 
 
