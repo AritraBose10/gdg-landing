@@ -122,14 +122,13 @@ export default function ApplicantReviewPage() {
 
 
 
+useEffect(() => {
+    if (currentIndex[0] >= filteredCandidates.length && filteredCandidates.length > 0) {
+        setCurrentIndex([filteredCandidates.length - 1, -1]);
+    }
+}, [filteredCandidates, currentIndex]);
 
-    useEffect(() => {
-        if (currentIndex >= filteredCandidates.length && filteredCandidates.length > 0) {
-            setCurrentIndex([filteredCandidates.length - 1, -1]);
-        }
-    }, [filteredCandidates, currentIndex]);
-
-    const currentCandidate = filteredCandidates[currentIndex];
+    const currentCandidate = filteredCandidates[currentIndex[0]];
 
     if (isLoading) {
         return <Loader />;
@@ -244,8 +243,9 @@ const paginate = (newDirection) => {
                                     <Menu size={22} />
                                 </button>
                                 <h1 className="text-2xl font-bold text-gray-800 tracking-tight hidden sm:block">Applicant Review</h1> <p className="text-gray-600 font-medium">
-                                    {currentCandidate ? `Candidate ${currentIndex + 1} of ${filteredCandidates.length}` : 'No candidates to display'}
-                                </p>
+                                    <p>
+    {currentCandidate ? `Candidate ${currentIndex[0] + 1} of ${filteredCandidates.length}` : 'No candidates to display'}
+</p>                                </p>
                             </div>
                             <div className="flex flex-wrap justify-end items-center gap-3">
                                 <div className="relative">
