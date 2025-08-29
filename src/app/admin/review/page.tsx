@@ -85,15 +85,20 @@ export default function ApplicantReviewPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [[currentIndex, direction], setCurrentIndex] = useState([0, 0]);
     const filteredCandidates = useMemo(() => {
-        return candidates.filter(c => {
-            const searchMatch = c.name.toLowerCase().includes(searchQuery.toLowerCase());
-            const roleMatch = filters.roleType === 'All' || c.type === filters.roleType;
-            const statusMatch = filters.status === 'All' || c.status === filters.status;
-            const yearMatch = filters.year === 'All' || c.year === filters.year;
-            const domainMatch = filters.domain === 'All' || c.domain.some(d => d.value === filters.domain);
-            return searchMatch && roleMatch && statusMatch && yearMatch && domainMatch;
-        });
-    }, [candidates, filters, searchQuery]);
+    return candidates.filter(c => {
+        // FIX: Use optional chaining to prevent crashes if 'name' is missing.
+        const searchMatch = c.name?.toLowerCase().includes(searchQuery.toLowerCase()) ?? true;
+
+        const roleMatch = filters.roleType === 'All' || c.type === filters.roleType;
+        const statusMatch = filters.status === 'All' || c.status === filters.status;
+        const yearMatch = filters.year === 'All' || c.year === filters.year;
+
+        // FIX: Use optional chaining to prevent crashes if 'domain' is missing.
+        const domainMatch = filters.domain === 'All' || c.domain?.some(d => d.value === filters.domain);
+        
+        return searchMatch && roleMatch && statusMatch && yearMatch && domainMatch;
+    });
+}, [candidates, filters, searchQuery]);
 
     useEffect(() => {
         const fetchCandidates = async () => {
