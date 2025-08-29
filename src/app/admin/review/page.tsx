@@ -144,13 +144,20 @@ export default function ApplicantReviewPage() {
         );
     }
 
-    const paginate = (newDirection) => {
-        if (!currentCandidate) return;
-        let newIndex = currentIndex + newDirection;
-        if (newIndex < 0) { newIndex = filteredCandidates.length - 1; }
-        else if (newIndex >= filteredCandidates.length) { newIndex = 0; }
-        setCurrentIndex([newIndex, newDirection]);
-    };
+    // In your paginate function
+const paginate = (newDirection) => {
+    if (!currentCandidate) return;
+
+    // FIX: Access the index from the state array
+    let newIndex = currentIndex[0] + newDirection; 
+
+    if (newIndex < 0) {
+        newIndex = filteredCandidates.length - 1;
+    } else if (newIndex >= filteredCandidates.length) {
+        newIndex = 0;
+    }
+    setCurrentIndex([newIndex, newDirection]);
+};
 
     const handleDecision = (id, newStatus) => {
         paginate(1);
