@@ -107,24 +107,38 @@ export default function ApplicantReviewPage() {
             if (!response.ok) {
                 throw new Error('Failed to fetch applicants. Are you logged in?');
             }
-            // 1. Get the raw, inconsistent data from the API
             const rawData = await response.json();
 
-            // 2. Normalize the data to create a consistent structure for every candidate
+            // Normalize the raw data to create a consistent structure
             const normalizedData = rawData.map((c, index) => ({
-                // --- Provide default fallbacks for properties that might be missing ---
-                id: c.id || `generated-id-${index}`, // Ensure every candidate has a unique key for React
-                name: c.name || 'No Name',
-                avatar: c.avatar || '', // Default to empty string; the onError will handle it
-                role: c.role || 'Applicant', // Provide a default role if missing
-                domain: c.domain || [], // CRITICAL: Ensure 'domain' is always an array
-                skills: c.skills || [], // CRITICAL: Ensure 'skills' is always an array to prevent crashes
-                batchYear: c.batchYear || c.batch || 'N/A', // Unify 'batchYear' and 'batch' keys
-                
-                // --- Spread the original data, letting our defaults be overridden if the property exists ---
+                // Spread the original data first
                 ...c,
+                // Now, provide fallbacks and unify properties.
+                // This will add or overwrite properties to ensure they always exist.
+                id: c.id || `generated-id-${index}`,
+                name: c.name || 'No Name',
+                avatar: c.avatar || '',
+                role: c.role || 'Applicant',
+                domain: c.domain || [],
+                skills: c.skills || [], // CRITICAL: Prevents crashes by ensuring skills is always an array
+                batchYear: c.batchYear || c.batch || 'N/A', // Unifies batch and batchYear
             }));
 
+            // Use the clean, normalized data to set the state
+            const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
+            setCandidates(normalizedData.map((c) => ({
+                ...c,
+                status: savedDecisions[c.id] || 'Pending' // All new candidates get a 'Pending' status
+            })));
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    fetchCandidates();
+}, []);
             // 3. Use the clean, normalized data to set your state
             const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
             setCandidates(normalizedData.map((c) => ({ ...c, status: savedDecisions[c.id] || 'Pending' })));
