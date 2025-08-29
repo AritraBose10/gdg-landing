@@ -109,20 +109,54 @@ export default function ApplicantReviewPage() {
             }
             const rawData = await response.json();
 
+            // FIX: Add a check to ensure the API response is an array.
+            if (!Array.isArray(rawData)) {
+                console.warn("API response was not an array. Setting candidates to empty.", rawData);
+                setCandidates([]); // Set state to an empty array to prevent crashes
+                setIsLoading(false);
+                return; // Exit the function
+            }
+
             // Normalize the raw data to create a consistent structure
-            const normalizedData = rawData.map((c, index) => ({
-                // Spread the original data first
+            const normalizedData = rawData.map((c, index) => {
+                // Define defaults for all required fields
+                const defaults = {
+                    id: `generated-id-${index}`,
+                    name: 'No Name',
+                    avatar: '',
+                    role: 'Applicant',
+                    domain: [],
+                    skills: [],
+                    batchYear: 'N/A',
+                };
+
+                // Return a new object that combines the defaults with the actual data,
+                // ensuring critical fields have valid fallbacks.
+                return {
+                    ...defaults, // Start with defaults
+                    ...c, // Spread actual data, overwriting defaults
+                    // Explicitly handle falsy values (like empty strings) or unified keys again
+                    id: c.id || defaults.id,
+                    name: c.name || defaults.name,
+                    batchYear: c.batchYear || c.batch || defaults.batchYear,
+                };
+            });
+            
+            // This part of the logic remains the same
+            const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
+            setCandidates(normalizedData.map((c) => ({
                 ...c,
-                // Now, provide fallbacks and unify properties.
-                // This will add or overwrite properties to ensure they always exist.
-                id: c.id || `generated-id-${index}`,
-                name: c.name || 'No Name',
-                avatar: c.avatar || '',
-                role: c.role || 'Applicant',
-                domain: c.domain || [],
-                skills: c.skills || [], // CRITICAL: Prevents crashes by ensuring skills is always an array
-                batchYear: c.batchYear || c.batch || 'N/A', // Unifies batch and batchYear
-            }));
+                status: savedDecisions[c.id] || 'Pending'
+            })));
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    fetchCandidates();
+}, []);
 
             // Use the clean, normalized data to set the state
             const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
