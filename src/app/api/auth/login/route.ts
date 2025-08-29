@@ -3,9 +3,13 @@ import admin from '../../../../lib/firebaseAdmin'; // Assumes you have this admi
 
 // This is your list of pre-determined users
 const ALLOWED_ADMIN_EMAILS = [
-    'aritraboselm10@gmail.com',
-    'another.admin@gmail.com',
-    'gdgoncampustiu@gmail.com'
+    'aritraboselm10@gmail.com', 'dev.bosepiush@gmail.com',
+    'gdgoncampustiu@gmail.com', 'subhasishsuv@gmail.com',
+    'ishan.rc2005@gmail.com', 'ayankaghosh2005@gmail.com',
+    'rabishankarmaityofficial@gmail.com', 'and24903@gmail.com',
+    'goenkakrish02@gmail.com','anuragroy485@gmail.com',
+    'shubhbrj7@gmail.com','pradipsadhukhan16@gmail.com',
+    'snehalghosh2004@gmail.com','mohakgupta500@gmail.com'
 ];
 
 export async function POST(request: Request) {
