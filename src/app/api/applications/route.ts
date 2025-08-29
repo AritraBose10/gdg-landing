@@ -6,9 +6,9 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
 // Your list of pre-determined users
 const ALLOWED_ADMIN_EMAILS = [
-    'aritraboselm10@gmail.com',
+    'aritraboselm10@gmail.com', 'dev.bosepiush@gmail.com',
     'another.admin@gmail.com',
-    'gdgoncampustiu@gmail.com'
+    'gdgoncampustiu@gmail.com', 'subhasishsuv@gmail.com', 'ishan.rc2005@gmail.com', 'ayankaghosh2005@gmail.com','rabishankarmaityofficial@gmail.com', 'and24903@gmail.com','goenkakrish02@gmail.com','anuragroy485@gmail.com','shubhbrj7@gmail.com'
 ];
 interface ApplicationData {
     name: string;
