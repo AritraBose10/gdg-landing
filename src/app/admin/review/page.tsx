@@ -108,6 +108,7 @@ export default function ApplicantReviewPage() {
                 throw new Error('Failed to fetch applicants. Are you logged in?');
             }
             const rawData = await response.json();
+            console.log('Actual API response:', rawData);
 
             // FIX: Add a check to ensure the API response is an array.
             if (!Array.isArray(rawData)) {
