@@ -108,7 +108,6 @@ export default function ApplicantReviewPage() {
                 throw new Error('Failed to fetch applicants. Are you logged in?');
             }
             const rawData = await response.json();
-            console.log('Actual API response:', rawData);
 
             // FIX: Add a check to ensure the API response is an array.
             if (!Array.isArray(rawData)) {
@@ -118,28 +117,30 @@ export default function ApplicantReviewPage() {
                 return; // Exit the function
             }
 
+            // Normalize the raw data to create a consistent structure
             const normalizedData = rawData.map((c, index) => {
-  const defaults = {
-    id: `generated-id-${index}`,
-    name: 'No Name',
-    avatar: '', // You might want to add a default avatar URL if none exists
-    role: 'Applicant',
-    domain: [],
-    skills: [],
-    batchYear: 'N/A',
-  };
+                // Define defaults for all required fields
+                const defaults = {
+                    id: `generated-id-${index}`,
+                    name: 'No Name',
+                    avatar: '',
+                    role: 'Applicant',
+                    domain: [],
+                    skills: [],
+                    batchYear: 'N/A',
+                };
 
-  return {
-    ...defaults, // Start with defaults
-    ...c, // Spread actual data, overwriting defaults
-    id: c.id || defaults.id,
-    name: c.name || defaults.name,
-    batchYear: c.batchYear || c.batch || defaults.batchYear,
-    domain: c.domain || defaults.domain, // Ensure domain is properly handled
-    skills: c.skills || defaults.skills, // Ensure skills are handled
-  };
-});
-
+                // Return a new object that combines the defaults with the actual data,
+                // ensuring critical fields have valid fallbacks.
+                return {
+                    ...defaults, // Start with defaults
+                    ...c, // Spread actual data, overwriting defaults
+                    // Explicitly handle falsy values (like empty strings) or unified keys again
+                    id: c.id || defaults.id,
+                    name: c.name || defaults.name,
+                    batchYear: c.batchYear || c.batch || defaults.batchYear,
+                };
+            });
             
             // This part of the logic remains the same
             const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
