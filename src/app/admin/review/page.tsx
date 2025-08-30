@@ -85,120 +85,51 @@ export default function ApplicantReviewPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [[currentIndex, direction], setCurrentIndex] = useState([0, 0]);
     const filteredCandidates = useMemo(() => {
-    return candidates.filter(c => {
-        // FIX: Use optional chaining to prevent crashes if 'name' is missing.
-        const searchMatch = c.name?.toLowerCase().includes(searchQuery.toLowerCase()) ?? true;
+        return candidates.filter(c => {
+            const searchMatch = c.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const roleMatch = filters.roleType === 'All' || c.type === filters.roleType;
+            const statusMatch = filters.status === 'All' || c.status === filters.status;
+            const yearMatch = filters.year === 'All' || c.year === filters.year;
+            const domainMatch = filters.domain === 'All' || c.domain.some(d => d.value === filters.domain);
+            return searchMatch && roleMatch && statusMatch && yearMatch && domainMatch;
+        });
+    }, [candidates, filters, searchQuery]);
 
-        const roleMatch = filters.roleType === 'All' || c.type === filters.roleType;
-        const statusMatch = filters.status === 'All' || c.status === filters.status;
-        const yearMatch = filters.year === 'All' || c.year === filters.year;
+    useEffect(() => {
+        const fetchCandidates = async () => {
+            try {
+                const response = await fetch('/api/applications');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch applicants. Are you logged in?');
+                }
+                const data = await response.json();
+                // We'll keep the localStorage logic for saving decisions for now
+                const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
+                setCandidates(data.map((c: any) => ({ ...c, status: savedDecisions[c.id] || 'Pending' })));
 
-        // FIX: Use optional chaining to prevent crashes if 'domain' is missing.
-        const domainMatch = filters.domain === 'All' || c.domain?.some(d => d.value === filters.domain);
-        
-        return searchMatch && roleMatch && statusMatch && yearMatch && domainMatch;
-    });
-}, [candidates, filters, searchQuery]);
-
-   useEffect(() => {
-    const fetchCandidates = async () => {
-        try {
-            const response = await fetch('/api/applications');
-            if (!response.ok) {
-                throw new Error('Failed to fetch applicants. Are you logged in?');
-            }
-            const rawData = await response.json();
-
-            // FIX: Add a check to ensure the API response is an array.
-            if (!Array.isArray(rawData)) {
-                console.warn("API response was not an array. Setting candidates to empty.", rawData);
-                setCandidates([]); // Set state to an empty array to prevent crashes
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
                 setIsLoading(false);
-                return; // Exit the function
             }
+        };
+        fetchCandidates();
+    }, []);
 
-            // Normalize the raw data to create a consistent structure
-            const normalizedData = rawData.map((c, index) => {
-                // Define defaults for all required fields
-                const defaults = {
-                    id: `generated-id-${index}`,
-                    name: 'No Name',
-                    avatar: '',
-                    role: 'Applicant',
-                    domain: [],
-                    skills: [],
-                    batchYear: 'N/A',
-                };
 
-                // Return a new object that combines the defaults with the actual data,
-                // ensuring critical fields have valid fallbacks.
-                return {
-                    ...defaults, // Start with defaults
-                    ...c, // Spread actual data, overwriting defaults
-                    // Explicitly handle falsy values (like empty strings) or unified keys again
-                    id: c.id || defaults.id,
-                    name: c.name || defaults.name,
-                    batchYear: c.batchYear || c.batch || defaults.batchYear,
-                };
-            });
-            
-            // This part of the logic remains the same
-            const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
-            setCandidates(normalizedData.map((c) => ({
-                ...c,
-                status: savedDecisions[c.id] || 'Pending'
-            })));
 
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
+
+
+
+
+
+    useEffect(() => {
+        if (currentIndex >= filteredCandidates.length && filteredCandidates.length > 0) {
+            setCurrentIndex([filteredCandidates.length - 1, -1]);
         }
-    
-    fetchCandidates();
-}, []);
+    }, [filteredCandidates, currentIndex]);
 
-            // Use the clean, normalized data to set the state
-            const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
-            setCandidates(normalizedData.map((c) => ({
-                ...c,
-                status: savedDecisions[c.id] || 'Pending' // All new candidates get a 'Pending' status
-            })));
-
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    fetchCandidates();
-}, []);
-            // 3. Use the clean, normalized data to set your state
-            const savedDecisions = JSON.parse(localStorage.getItem('candidateDecisions_v6') || '{}');
-            setCandidates(normalizedData.map((c) => ({ ...c, status: savedDecisions[c.id] || 'Pending' })));
-
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    fetchCandidates();
-}, []);
-
-
-
-
-
-
-
-useEffect(() => {
-    if (currentIndex[0] >= filteredCandidates.length && filteredCandidates.length > 0) {
-        setCurrentIndex([filteredCandidates.length - 1, -1]);
-    }
-}, [filteredCandidates, currentIndex]);
-
-    const currentCandidate = filteredCandidates[currentIndex[0]];
+    const currentCandidate = filteredCandidates[currentIndex];
 
     if (isLoading) {
         return <Loader />;
@@ -213,20 +144,13 @@ useEffect(() => {
         );
     }
 
-    // In your paginate function
-const paginate = (newDirection) => {
-    // Get the current index from the state array
-    const currentIdx = currentIndex[0];
-    const newIndex = currentIdx + newDirection;
-
-    // Check if the new index is within the valid range (0 to length-1)
-    if (newIndex < 0 || newIndex >= filteredCandidates.length) {
-        return; // If not, do nothing and exit the function
-    }
-
-    // If the new index is valid, update the state
-    setCurrentIndex([newIndex, newDirection]);
-};
+    const paginate = (newDirection) => {
+        if (!currentCandidate) return;
+        let newIndex = currentIndex + newDirection;
+        if (newIndex < 0) { newIndex = filteredCandidates.length - 1; }
+        else if (newIndex >= filteredCandidates.length) { newIndex = 0; }
+        setCurrentIndex([newIndex, newDirection]);
+    };
 
     const handleDecision = (id, newStatus) => {
         paginate(1);
@@ -313,9 +237,8 @@ const paginate = (newDirection) => {
                                     <Menu size={22} />
                                 </button>
                                 <h1 className="text-2xl font-bold text-gray-800 tracking-tight hidden sm:block">Applicant Review</h1> <p className="text-gray-600 font-medium">
-                                    <p>
-    {currentCandidate ? `Candidate ${currentIndex[0] + 1} of ${filteredCandidates.length}` : 'No candidates to display'}
-</p>                                </p>
+                                    {currentCandidate ? `Candidate ${currentIndex + 1} of ${filteredCandidates.length}` : 'No candidates to display'}
+                                </p>
                             </div>
                             <div className="flex flex-wrap justify-end items-center gap-3">
                                 <div className="relative">
@@ -413,27 +336,8 @@ const paginate = (newDirection) => {
                             </AnimatePresence>
                         </div>
 
-                        <motion.button
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.9 }}
-    onClick={() => paginate(-1)}
-    // FIX: Disable if it's the FIRST card OR if there are no candidates
-    disabled={currentIndex[0] === 0 || !currentCandidate}
-    className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
->
-    <ChevronLeft className="h-6 w-6 text-gray-700" />
-</motion.button>
-
-<motion.button
-    whileHover={{ scale: 1.1 }}
-    whileTap={{ scale: 0.9 }}
-    onClick={() => paginate(1)}
-    // FIX: Disable if it's the LAST card OR if there are no candidates
-    disabled={currentIndex[0] === filteredCandidates.length - 1 || !currentCandidate}
-    className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
->
-    <ChevronRight className="h-6 w-6 text-gray-700" />
-</motion.button>
+                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => paginate(-1)} disabled={!currentCandidate} className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronLeft className="h-6 w-6 text-gray-700" /></motion.button>
+                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => paginate(1)} disabled={!currentCandidate} className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"><ChevronRight className="h-6 w-6 text-gray-700" /></motion.button>
                     </main>
 
 
