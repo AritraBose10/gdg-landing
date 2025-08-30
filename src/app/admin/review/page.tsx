@@ -154,7 +154,7 @@ export default function ApplicantReviewPage() {
         } finally {
             setIsLoading(false);
         }
-    };
+    
     fetchCandidates();
 }, []);
 
